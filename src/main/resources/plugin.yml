@@ -3,3 +3,13 @@ version: 0.1.0
 name: PlotIslands
 author: JoaccoG
 api-version: 1.13
+
+commands:
+  plotislands:
+    description: Main command for PlotIslands
+    aliases:
+      - pi
+  version:
+    description: Show plugin's version
+    aliases:
+      - v
