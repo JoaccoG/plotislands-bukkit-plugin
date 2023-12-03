@@ -14,13 +14,13 @@ public class PlotIslands extends JavaPlugin {
 
         Bukkit
             .getConsoleSender()
-            .sendMessage(MessageUtils.getColoredMessage("&eEnabled successfully v" + version));
+            .sendMessage(MessageUtils.getColoredMessageWithPrefix("&eEnabled successfully v" + version));
     }
 
     public void onDisable() {
         Bukkit
             .getConsoleSender()
-            .sendMessage(MessageUtils.getColoredMessage("&eDisabled successfully v" + version));
+            .sendMessage(MessageUtils.getColoredMessageWithPrefix("&eDisabled successfully v" + version));
     }
 
     public void registerCommands() {

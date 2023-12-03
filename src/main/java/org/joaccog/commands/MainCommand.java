@@ -10,11 +10,20 @@ public class MainCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(MessageUtils.getColoredMessage("&cThis action can only be performed by a player"));
+            sender.sendMessage(MessageUtils.getColoredMessageWithPrefix("&cThis action can only be performed by a player"));
             return true;
         }
 
-        sender.sendMessage(MessageUtils.getColoredMessage("&7Information about PlotIslands..."));
+        if (args.length >= 1) {
+            if (args[0].equalsIgnoreCase("help")) {
+                // /pi help
+            } else if (args[0].equalsIgnoreCase("list")) {
+                // /pi list
+            } else if (args[0].equalsIgnoreCase("create")) {
+                // /pi create
+            }
+        }
         return true;
     }
 }
+

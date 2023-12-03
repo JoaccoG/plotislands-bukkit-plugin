@@ -9,7 +9,3 @@ commands:
     description: Main command for PlotIslands
     aliases:
       - pi
-  version:
-    description: Show plugin's version
-    aliases:
-      - v
