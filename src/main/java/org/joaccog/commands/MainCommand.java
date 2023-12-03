@@ -1,26 +1,20 @@
 package org.joaccog.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.joaccog.PlotIslands;
+import org.joaccog.utils.MessageUtils;
 
 public class MainCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
         if (!(sender instanceof Player)) {
-            // Console
-            sender.sendMessage(
-                ChatColor.translateAlternateColorCodes(
-                    '&', String.format("%s&eThis action can only be performed by a player", PlotIslands.prefix)
-                )
-            );
+            sender.sendMessage(MessageUtils.getColoredMessage("&cThis action can only be performed by a player"));
             return true;
         }
-        // Player
 
+        sender.sendMessage(MessageUtils.getColoredMessage("&7Information about PlotIslands..."));
         return true;
     }
 }

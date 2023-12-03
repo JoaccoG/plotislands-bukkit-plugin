@@ -1,9 +1,9 @@
 package org.joaccog;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.joaccog.commands.MainCommand;
+import org.joaccog.utils.MessageUtils;
 
 public class PlotIslands extends JavaPlugin {
     public static String prefix = "&8[&7PlotIslands&8] ";
@@ -14,21 +14,13 @@ public class PlotIslands extends JavaPlugin {
 
         Bukkit
             .getConsoleSender()
-            .sendMessage(
-                ChatColor.translateAlternateColorCodes(
-                    '&', String.format("%s&eEnabled successfully (v%s)", prefix, version)
-                )
-            );
+            .sendMessage(MessageUtils.getColoredMessage("&eEnabled successfully v" + version));
     }
 
     public void onDisable() {
         Bukkit
             .getConsoleSender()
-            .sendMessage(
-                ChatColor.translateAlternateColorCodes(
-                    '&', String.format("%s&eDisabled successfully (v%s)", prefix, version)
-                )
-            );
+            .sendMessage(MessageUtils.getColoredMessage("&eDisabled successfully v" + version));
     }
 
     public void registerCommands() {
