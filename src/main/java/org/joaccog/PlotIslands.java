@@ -73,7 +73,9 @@ public class PlotIslands extends JavaPlugin implements Listener {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), customCommand);
                     LogUtils.info("Successfully executed all commands.");
                     LogUtils.info("Saving world on database");
-                    if (configurationHandler.saveProcessedWorlds(processedWorlds)) {
+                    processedWorlds.add(worldName);
+                    boolean responseOfDatabaseUpdate = configurationHandler.saveProcessedWorlds(processedWorlds);
+                    if (responseOfDatabaseUpdate) {
                         LogUtils.info("Successfully saved world on database.");
                     } else {
                         LogUtils.severe("Error while saving database files");
