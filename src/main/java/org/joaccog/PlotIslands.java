@@ -19,25 +19,33 @@ import org.joaccog.utils.MessageUtils;
 
 public class PlotIslands extends JavaPlugin implements Listener {
     public static String prefix = "&8[&7PlotIslands&8] ";
-    private final String version = getDescription().getVersion();
-    private Set<String> processedWorlds = new HashSet<>();
-    private File dataFolder;
-    private File databaseFile;
-    private FileConfiguration config;
+    private final String pluginName = getDescription().getName();
+    private final String pluginVersion = getDescription().getVersion();
+    private final Set<String> processedWorlds = new HashSet<>();
+    public static File dataFolder;
+    public static File databaseFile;
+    public static FileConfiguration config;
 
     @Override
     public void onEnable() {
-        dataFolder = getDataFolder();
-        databaseFile = new File(dataFolder, "database.yml");
-        config = YamlConfiguration.loadConfiguration(databaseFile);
-        processedWorlds.addAll(config.getStringList("processedWorlds"));
+        try {
+            getLogger().info("Attempting to get plugin's folder");
+            dataFolder = getDataFolder();
+            databaseFile = new File(dataFolder, "database.yml");
+            config = YamlConfiguration.loadConfiguration(databaseFile);
+            processedWorlds.addAll(config.getStringList("processedWorlds"));
+        } catch (Exception e) {
+            getLogger().severe("Error while getting plugin's folder");
+            getLogger().severe("Disabling " + pluginName);
+            onDisable();
+        }
 
         Bukkit.getPluginManager().registerEvents(this, this);
 
         registerCommands();
         Bukkit
             .getConsoleSender()
-            .sendMessage(MessageUtils.getColoredMessageWithPrefix("&eEnabled successfully v" + version));
+            .sendMessage(MessageUtils.getColoredMessageWithPrefix("&eEnabled successfully v" + pluginVersion));
     }
 
     @Override
@@ -46,11 +54,12 @@ public class PlotIslands extends JavaPlugin implements Listener {
         saveConfig();
         Bukkit
             .getConsoleSender()
-            .sendMessage(MessageUtils.getColoredMessageWithPrefix("&eDisabled successfully v" + version));
+            .sendMessage(MessageUtils.getColoredMessageWithPrefix("&eDisabled successfully v" + pluginVersion));
     }
 
     public void registerCommands() {
-        Objects.requireNonNull(this.getCommand("plotislands"))
+        Objects
+            .requireNonNull(this.getCommand("plotislands"))
             .setExecutor(new MainCommand());
     }
 
@@ -64,14 +73,18 @@ public class PlotIslands extends JavaPlugin implements Listener {
 
             Bukkit.getScheduler().runTaskLater(this, () -> {
                 try {
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), customCommand);
+                    getLogger().info("Adding world: " + worldName + " to database");
                     processedWorlds.add(worldName);
+                    getLogger().info("Executing custom commands for world: " + worldName);
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), customCommand);
                     getLogger().info("VT+ toggled for world: " + worldName);
                 } catch (Exception e) {
                     e.printStackTrace();
                     getLogger().severe("Error toggling VT+ for world: " + worldName);
                 }
             }, 100L);
+        } else {
+            getLogger().info("Skipping ");
         }
     }
 }
