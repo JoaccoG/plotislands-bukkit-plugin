@@ -2,7 +2,6 @@ package org.joaccog;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldInitEvent;
@@ -10,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import org.joaccog.commands.MainCommand;
 import org.joaccog.utils.LogUtils;
+import org.joaccog.utils.ConfigurationHandler;
 
 import java.io.File;
 import java.util.HashSet;
@@ -21,10 +21,8 @@ public class PlotIslands extends JavaPlugin implements Listener {
     public static String prefix = "&8[&7PlotIslands&8] ";
     private final String pluginName = getDescription().getName();
     private final String pluginVersion = getDescription().getVersion();
-    private final Set<String> processedWorlds = new HashSet<>();
-    public static File dataFolder;
-    public static File databaseFile;
-    public static FileConfiguration config;
+    private Set<String> processedWorlds;
+    private ConfigurationHandler configurationHandler;
 
     @Override
     public void onEnable() {
@@ -33,10 +31,9 @@ public class PlotIslands extends JavaPlugin implements Listener {
             registerCommands();
 
             LogUtils.info("Getting plugin configuration...");
-            dataFolder = getDataFolder();
-            databaseFile = new File(dataFolder, "database.yml");
-            config = YamlConfiguration.loadConfiguration(databaseFile);
-            processedWorlds.addAll(config.getStringList("processedWorlds"));
+            configurationHandler = new ConfigurationHandler(this);
+            configurationHandler.loadConfigurations();
+            processedWorlds = configurationHandler.getProcessedWorlds();
 
             LogUtils.info("Listening worlds creation events...");
             Bukkit
@@ -54,7 +51,7 @@ public class PlotIslands extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        saveProcessedWorlds();
+        configurationHandler.saveProcessedWorlds(processedWorlds);
         LogUtils.severe("Successfully disabled on v" + pluginVersion);
     }
 
@@ -62,12 +59,6 @@ public class PlotIslands extends JavaPlugin implements Listener {
         Objects
             .requireNonNull(this.getCommand("plotislands"))
             .setExecutor(new MainCommand());
-    }
-
-    public void saveProcessedWorlds() {
-        config.set("processedWorlds", new LinkedList<>(processedWorlds));
-        saveConfig();
-        LogUtils.info("List of worlds on database updated.");
     }
 
     @EventHandler
@@ -83,8 +74,7 @@ public class PlotIslands extends JavaPlugin implements Listener {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), customCommand);
                     LogUtils.info("Successfully executed all commands.");
                     LogUtils.info("Saving world on database");
-                    processedWorlds.add(worldName);
-                    saveProcessedWorlds();
+                    configurationHandler.saveProcessedWorlds(processedWorlds);
                     LogUtils.info("Successfully saved world on database.");
                 } catch (Exception e) {
                     LogUtils.severe("Unexpected error while executing commands on world: " + worldName);
