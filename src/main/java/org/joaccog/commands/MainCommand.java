@@ -10,7 +10,7 @@ import org.joaccog.utils.MessageUtils;
 
 public class MainCommand implements CommandExecutor {
     private final String featureOnDevelopment = MessageUtils.getColoredMessageWithPrefix("&6Feature in development...");
-    private final String unknownCommand = MessageUtils.getColoredMessageWithPrefix("&cUnknown command. use &6/pi help &cfor more information.");
+    private final String unknownCommand = MessageUtils.getColoredMessageWithPrefix("&cUnknown command. use &6/pi help&c for more information.");
 
     @Override
     public boolean onCommand(
