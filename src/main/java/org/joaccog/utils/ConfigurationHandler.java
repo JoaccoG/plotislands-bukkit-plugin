@@ -10,39 +10,47 @@ import java.util.LinkedList;
 import java.util.Set;
 
 public class ConfigurationHandler {
-    private final FileConfiguration config;
     private final File configFile;
+    private final File databaseFile;
+    private FileConfiguration configConfig;
+    private FileConfiguration databaseConfig;
 
     public ConfigurationHandler(Plugin plugin) {
         File pluginFolder = plugin.getDataFolder();
         this.configFile = new File(pluginFolder, "config.yml");
-        File databaseFile = new File(pluginFolder, "database.yml");
-        this.config = loadConfiguration(configFile);
+        this.databaseFile = new File(pluginFolder, "database.yml");
+
+        File[] filesArray = new File[]{configFile, databaseFile};
+        FileConfiguration(filesArray);
     }
 
-    private FileConfiguration loadConfiguration(File file) {
-        return YamlConfiguration.loadConfiguration(file);
+    private void FileConfiguration(File[] files) {
+        configConfig = YamlConfiguration.loadConfiguration(files[0]);
+        databaseConfig = YamlConfiguration.loadConfiguration(files[1]);
     }
 
-    public FileConfiguration getConfig() {
-        return config;
-    }
-
-    public void saveConfig() {
+    private boolean saveAllFiles() {
         try {
-            config.save(configFile);
+            configConfig.save(configFile);
+            databaseConfig.save(databaseFile);
+            return true;
         } catch (Exception e) {
-            LogUtils.severe("Error while saving configuration files.");
+            LogUtils.severe("Error while saving files.");
             LogUtils.severe("Error stack trace: \n" + e.getMessage());
+            return false;
         }
     }
 
-    public Set<String> getProcessedWorlds() {
-        return new HashSet<>(config.getStringList("processedWorlds"));
+    public FileConfiguration getConfig() {
+        return configConfig;
     }
 
-    public void saveProcessedWorlds(Set<String> processedWorlds) {
-        config.set("processedWorlds", new LinkedList<>(processedWorlds));
-        saveConfig();
+    public Set<String> getDatabase() {
+        return new HashSet<>(databaseConfig.getStringList("processedWorlds"));
+    }
+
+    public boolean saveProcessedWorlds(Set<String> processedWorlds) {
+        databaseConfig.set("processedWorlds", new LinkedList<>(processedWorlds));
+        return saveAllFiles();
     }
 }

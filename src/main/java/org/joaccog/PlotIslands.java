@@ -32,8 +32,7 @@ public class PlotIslands extends JavaPlugin implements Listener {
 
             LogUtils.info("Getting plugin configuration...");
             configurationHandler = new ConfigurationHandler(this);
-            configurationHandler.loadConfigurations();
-            processedWorlds = configurationHandler.getProcessedWorlds();
+            processedWorlds = configurationHandler.getDatabase();
 
             LogUtils.info("Listening worlds creation events...");
             Bukkit
@@ -74,8 +73,11 @@ public class PlotIslands extends JavaPlugin implements Listener {
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), customCommand);
                     LogUtils.info("Successfully executed all commands.");
                     LogUtils.info("Saving world on database");
-                    configurationHandler.saveProcessedWorlds(processedWorlds);
-                    LogUtils.info("Successfully saved world on database.");
+                    if (configurationHandler.saveProcessedWorlds(processedWorlds)) {
+                        LogUtils.info("Successfully saved world on database.");
+                    } else {
+                        LogUtils.severe("Error while saving database files");
+                    }
                 } catch (Exception e) {
                     LogUtils.severe("Unexpected error while executing commands on world: " + worldName);
                     LogUtils.severe("Error stack trace: \n" + e.getMessage());
