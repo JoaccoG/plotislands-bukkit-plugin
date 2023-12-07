@@ -11,6 +11,6 @@ public class MessageUtils {
 
     public static String getColoredMessageWithPrefix(String message) {
         return ChatColor.translateAlternateColorCodes(
-            '&', PlotIslands.prefix + message);
+            '&', PlotIslands.formattedPrefix + message);
     }
 }

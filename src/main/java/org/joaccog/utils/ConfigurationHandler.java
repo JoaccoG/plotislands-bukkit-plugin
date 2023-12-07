@@ -29,15 +29,13 @@ public class ConfigurationHandler {
         databaseConfig = YamlConfiguration.loadConfiguration(files[1]);
     }
 
-    private boolean saveAllFiles() {
+    private void saveAllFiles() {
         try {
             configConfig.save(configFile);
             databaseConfig.save(databaseFile);
-            return true;
         } catch (Exception e) {
             LogUtils.severe("Error while saving files.");
             LogUtils.severe("Error stack trace: \n" + e.getMessage());
-            return false;
         }
     }
 
@@ -49,8 +47,8 @@ public class ConfigurationHandler {
         return new HashSet<>(databaseConfig.getStringList("processedWorlds"));
     }
 
-    public boolean saveProcessedWorlds(Set<String> processedWorlds) {
+    public void saveProcessedWorlds(Set<String> processedWorlds) {
         databaseConfig.set("processedWorlds", new LinkedList<>(processedWorlds));
-        return saveAllFiles();
+        saveAllFiles();
     }
 }
