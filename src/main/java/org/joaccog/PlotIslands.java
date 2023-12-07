@@ -17,7 +17,6 @@ public class PlotIslands extends JavaPlugin implements Listener {
     public static String prefix = "[PlotIslands] ";
     public static String formattedPrefix = "&8[&7PlotIslands&8] ";
     private final String pluginVersion = getDescription().getVersion();
-    private Set<String> processedWorlds;
 
     // Instances
     private ConfigurationHandler configurationHandler;
@@ -44,7 +43,7 @@ public class PlotIslands extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        configurationHandler.saveProcessedWorlds(processedWorlds);
+        worldCreationHandler.saveWorldsData();
         LogUtils.info("Successfully disabled on v" + pluginVersion);
     }
 

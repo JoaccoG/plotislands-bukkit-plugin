@@ -52,4 +52,8 @@ public class WorldCreationHandler implements Listener {
             LogUtils.warning("Skipping world: " + worldName);
         }
     }
+
+    public void saveWorldsData() {
+        configurationHandler.saveProcessedWorlds(processedWorlds);
+    }
 }
