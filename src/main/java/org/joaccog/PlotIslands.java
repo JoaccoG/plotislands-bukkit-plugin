@@ -11,7 +11,6 @@ import org.joaccog.utils.ConfigurationHandler;
 import org.joaccog.world.WorldCreationHandler;
 
 import java.util.Objects;
-import java.util.Set;
 
 public class PlotIslands extends JavaPlugin implements Listener {
     public static String prefix = "[PlotIslands] ";
